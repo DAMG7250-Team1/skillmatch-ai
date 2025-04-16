@@ -1,0 +1,12 @@
+pydantic
+fastapi
+uvicorn
+requests
+python-dotenv
+boto3
+pandas
+numpy 
+webdriver-manager
+selenium
+pinecone
+openai
