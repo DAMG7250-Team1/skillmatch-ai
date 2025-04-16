@@ -482,8 +482,7 @@ def main():
 
             data = response.json().get("data", {})
             st.success("✅ Profile submitted successfully!")
-            st.balloons()
-
+            
             st.subheader("📊 Profile Summary")
             st.markdown("### GitHub Info")
             st.write(f"👤 Username: {github_result['data']['username']}")
@@ -506,11 +505,6 @@ def main():
 
             st.info("🔍 Finding job matches...")
             match_success, match_result = get_job_matches(user_profile)
-
-
-            # 👇 Add this to visually inspect the match result JSON
-            st.subheader("🧪 Raw Match Result")
-            st.json(match_result)
 
             if match_success and match_result.get("status") == "success":
                 st.success(f"🎯 Found {match_result['total_matches']} job matches")
