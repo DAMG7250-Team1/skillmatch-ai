@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 # Import the scraper
 try:
     from jobs.scraper import scrape_jobs
-    from jobs.embeddings import JobEmbeddingsProcessor
+    from jobs.embeddings import JobEmbeddingsProcessor 
     logger.info("Successfully imported job modules")
 except ImportError as e:
     logger.error(f"Error importing job modules: {str(e)}")
@@ -47,7 +47,7 @@ dag = DAG(
     'job_scraping',
     default_args=default_args,
     description='Scrape jobs from JobRight.ai',
-    schedule_interval=timedelta(days=1),
+    schedule_interval=timedelta(hours=4),
     start_date=days_ago(1),
     catchup=False,
     tags=['scraping', 'jobs'],
