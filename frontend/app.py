@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
  
 # Load environment variables
 load_dotenv()
-BACKEND_API_URL = os.getenv('BACKEND_API_URL', 'https://skillmatch-xqv7xxttja-ue.a.run.app')
+BACKEND_API_URL = os.getenv('BACKEND_API_URL', ' https://skillmatch-xqv7xxttja-ue.a.run.app')
 # BACKEND_API_URL = 'https://skillmatch-xqv7xxttja-ue.a.run.app'
 # Initialize session state for persistence across reruns
 for key, default in [
@@ -22,7 +22,8 @@ for key, default in [
     ("github_markdown_url", ""),
     ("matches", []),
     ("processing_jobs", set()),
-    ("job_results", {})
+    ("job_results", {}),
+    ("displayed_jobs", 10)
 ]:
     if key not in st.session_state:
         st.session_state[key] = default
@@ -434,14 +435,28 @@ def main():
             if ok and mr.get("status") == "success":
                 st.success(f"Found {mr.get('total_matches',0)} matches")
                 st.session_state.matches = mr.get("matches", [])
+                # Reset displayed jobs count when new matches are loaded
+                st.session_state.displayed_jobs = 10
             else:
                 st.error(f"Matching error: {mr.get('error','Unknown')}")
  
     # Always show matches if present
     if st.session_state.matches:
         st.subheader("🔍 Matching Jobs")
-        for m in st.session_state.matches:
+        # Display only the first N jobs based on displayed_jobs state
+        displayed_jobs = min(st.session_state.displayed_jobs, len(st.session_state.matches))
+        for i, m in enumerate(st.session_state.matches[:displayed_jobs]):
             display_job_match(m)
+        
+        # Show load more button if there are more jobs to display
+        if displayed_jobs < len(st.session_state.matches) and displayed_jobs < 30:
+            if st.button("📋 Load More Jobs"):
+                # Increase the number of displayed jobs by 10, up to a maximum of 30
+                st.session_state.displayed_jobs = min(st.session_state.displayed_jobs + 10, 30)
+                st.experimental_rerun()
+        
+        # Show total displayed vs available
+        st.caption(f"Showing {displayed_jobs} of {len(st.session_state.matches)} matching jobs")
    
    
  
