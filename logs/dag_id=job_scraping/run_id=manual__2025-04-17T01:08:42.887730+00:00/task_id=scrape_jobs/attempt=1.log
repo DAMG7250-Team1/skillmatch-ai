@@ -1,0 +1,62 @@
+[2025-04-17T01:08:44.400+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-04-17T01:08:44.408+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: job_scraping.scrape_jobs manual__2025-04-17T01:08:42.887730+00:00 [queued]>
+[2025-04-17T01:08:44.411+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: job_scraping.scrape_jobs manual__2025-04-17T01:08:42.887730+00:00 [queued]>
+[2025-04-17T01:08:44.411+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 2
+[2025-04-17T01:08:44.416+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): scrape_jobs> on 2025-04-17 01:08:42.887730+00:00
+[2025-04-17T01:08:44.420+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:62: DeprecationWarning: This process (pid=87) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-04-17T01:08:44.421+0000] {standard_task_runner.py:64} INFO - Started process 89 to run task
+[2025-04-17T01:08:44.421+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'job_scraping', 'scrape_jobs', 'manual__2025-04-17T01:08:42.887730+00:00', '--job-id', '14', '--raw', '--subdir', 'DAGS_FOLDER/job_scraping_dag.py', '--cfg-path', '/tmp/tmppgoyfzjd']
+[2025-04-17T01:08:44.422+0000] {standard_task_runner.py:91} INFO - Job 14: Subtask scrape_jobs
+[2025-04-17T01:08:44.447+0000] {task_command.py:426} INFO - Running <TaskInstance: job_scraping.scrape_jobs manual__2025-04-17T01:08:42.887730+00:00 [running]> on host bd292105672f
+[2025-04-17T01:08:44.528+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='job_scraping' AIRFLOW_CTX_TASK_ID='scrape_jobs' AIRFLOW_CTX_EXECUTION_DATE='2025-04-17T01:08:42.887730+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-04-17T01:08:42.887730+00:00'
+[2025-04-17T01:08:44.529+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-04-17T01:08:44.536+0000] {job_scraping_dag.py:59} INFO - Starting job scraper task
+[2025-04-17T01:08:44.537+0000] {scraper.py:77} INFO - Starting job scraping...
+[2025-04-17T01:08:44.537+0000] {scraper.py:89} INFO - Connecting to Selenium Chrome service
+[2025-04-17T01:08:45.024+0000] {scraper.py:101} INFO - Navigating to JobRight.ai homepage
+[2025-04-17T01:08:47.878+0000] {scraper.py:107} INFO - Saved screenshot of JobRight homepage
+[2025-04-17T01:08:47.882+0000] {scraper.py:110} INFO - Looking for Sign In button
+[2025-04-17T01:08:47.911+0000] {scraper.py:121} INFO - Found Sign In button using selector: //span[contains(text(), 'SIGN IN')]
+[2025-04-17T01:08:48.091+0000] {scraper.py:134} INFO - Clicked Sign In button using standard click
+[2025-04-17T01:08:51.112+0000] {scraper.py:149} INFO - Login form found - Sign In click successful
+[2025-04-17T01:08:51.113+0000] {scraper.py:165} INFO - Entering login credentials
+[2025-04-17T01:08:51.437+0000] {scraper.py:176} INFO - Submitted login form
+[2025-04-17T01:08:56.438+0000] {scraper.py:182} INFO - Navigating to jobs page
+[2025-04-17T01:09:02.483+0000] {scraper.py:191} INFO - Saved screenshot of jobs page
+[2025-04-17T01:09:08.579+0000] {scraper.py:207} INFO - Found 10 jobs with selector 'index_front__oxzpW'
+[2025-04-17T01:09:08.581+0000] {scraper.py:221} INFO - Processing 10 jobs
+[2025-04-17T01:09:08.582+0000] {scraper.py:226} INFO - Processing job 1/3
+[2025-04-17T01:09:14.228+0000] {scraper.py:271} INFO - Clicked job 1 with standard click
+[2025-04-17T01:09:19.404+0000] {scraper.py:298} INFO - Found job title: Software Engineer III, Trust and Safety Engineering
+[2025-04-17T01:09:19.415+0000] {scraper.py:307} INFO - Found company: Vimeo
+[2025-04-17T01:09:19.428+0000] {scraper.py:316} INFO - Found location: New York, NY
+[2025-04-17T01:09:19.570+0000] {scraper.py:325} INFO - Found 13 skills
+[2025-04-17T01:09:19.833+0000] {scraper.py:61} INFO - Successfully saved data to s3://skillmatchai/jobs/raw_files/jobright_job_1_20250417_010919.json
+[2025-04-17T01:09:19.834+0000] {scraper.py:338} INFO - Saved job 1 to S3: s3://skillmatchai/jobs/raw_files/jobright_job_1_20250417_010919.json
+[2025-04-17T01:09:24.855+0000] {scraper.py:226} INFO - Processing job 2/3
+[2025-04-17T01:09:28.191+0000] {scraper.py:274} INFO - Clicked job 2 with JavaScript click
+[2025-04-17T01:09:33.343+0000] {scraper.py:298} INFO - Found job title: Systems Engineer
+[2025-04-17T01:09:33.352+0000] {scraper.py:307} INFO - Found company: Elevate Services Group
+[2025-04-17T01:09:33.362+0000] {scraper.py:316} INFO - Found location: Greenwood Village, CO
+[2025-04-17T01:09:33.471+0000] {scraper.py:325} INFO - Found 11 skills
+[2025-04-17T01:09:33.666+0000] {scraper.py:61} INFO - Successfully saved data to s3://skillmatchai/jobs/raw_files/jobright_job_2_20250417_010933.json
+[2025-04-17T01:09:33.666+0000] {scraper.py:338} INFO - Saved job 2 to S3: s3://skillmatchai/jobs/raw_files/jobright_job_2_20250417_010933.json
+[2025-04-17T01:09:38.689+0000] {scraper.py:226} INFO - Processing job 3/3
+[2025-04-17T01:09:44.105+0000] {scraper.py:274} INFO - Clicked job 3 with JavaScript click
+[2025-04-17T01:09:49.271+0000] {scraper.py:298} INFO - Found job title: AI Researcher
+[2025-04-17T01:09:49.282+0000] {scraper.py:307} INFO - Found company: Cisco
+[2025-04-17T01:09:49.294+0000] {scraper.py:316} INFO - Found location: San Jose, CA
+[2025-04-17T01:09:49.591+0000] {scraper.py:325} INFO - Found 25 skills
+[2025-04-17T01:09:49.831+0000] {scraper.py:61} INFO - Successfully saved data to s3://skillmatchai/jobs/raw_files/jobright_job_3_20250417_010949.json
+[2025-04-17T01:09:49.832+0000] {scraper.py:338} INFO - Saved job 3 to S3: s3://skillmatchai/jobs/raw_files/jobright_job_3_20250417_010949.json
+[2025-04-17T01:09:54.945+0000] {scraper.py:61} INFO - Successfully saved data to s3://skillmatchai/jobs/raw_files/jobright_jobs_20250417_010954.json
+[2025-04-17T01:09:54.946+0000] {scraper.py:371} INFO - Successfully saved all 3 jobs to S3: s3://skillmatchai/jobs/raw_files/jobright_jobs_20250417_010954.json
+[2025-04-17T01:09:55.043+0000] {job_scraping_dag.py:63} INFO - Job scraping completed successfully
+[2025-04-17T01:09:55.043+0000] {python.py:237} INFO - Done. Returned value was: Success
+[2025-04-17T01:09:55.044+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-04-17T01:09:55.066+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=job_scraping, task_id=scrape_jobs, run_id=manual__2025-04-17T01:08:42.887730+00:00, execution_date=20250417T010842, start_date=20250417T010844, end_date=20250417T010955
+[2025-04-17T01:09:55.084+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 0
+[2025-04-17T01:09:55.099+0000] {taskinstance.py:3503} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-04-17T01:09:55.100+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

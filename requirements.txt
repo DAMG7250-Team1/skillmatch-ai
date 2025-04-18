@@ -37,5 +37,17 @@ sentence-transformers
 
 langchain
 langgraph
+langchain_community
+
+typer
+tavily-python
+ 
+hf_xet
+google-search-results
+serpapi
+
+streamlit-extras
+streamlit
+
 
 

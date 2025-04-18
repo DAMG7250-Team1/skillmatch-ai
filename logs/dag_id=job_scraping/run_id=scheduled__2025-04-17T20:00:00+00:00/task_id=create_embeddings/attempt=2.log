@@ -1,0 +1,38 @@
+[2025-04-18T02:19:28.762+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-04-18T02:19:28.772+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: job_scraping.create_embeddings scheduled__2025-04-17T20:00:00+00:00 [queued]>
+[2025-04-18T02:19:28.775+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: job_scraping.create_embeddings scheduled__2025-04-17T20:00:00+00:00 [queued]>
+[2025-04-18T02:19:28.775+0000] {taskinstance.py:2306} INFO - Starting attempt 2 of 2
+[2025-04-18T02:19:28.780+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): create_embeddings> on 2025-04-17 20:00:00+00:00
+[2025-04-18T02:19:28.783+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:62: DeprecationWarning: This process (pid=177) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-04-18T02:19:28.784+0000] {standard_task_runner.py:64} INFO - Started process 179 to run task
+[2025-04-18T02:19:28.785+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'job_scraping', 'create_embeddings', 'scheduled__2025-04-17T20:00:00+00:00', '--job-id', '44', '--raw', '--subdir', 'DAGS_FOLDER/job_scraping_dag.py', '--cfg-path', '/tmp/tmpixshmzun']
+[2025-04-18T02:19:28.786+0000] {standard_task_runner.py:91} INFO - Job 44: Subtask create_embeddings
+[2025-04-18T02:19:28.807+0000] {task_command.py:426} INFO - Running <TaskInstance: job_scraping.create_embeddings scheduled__2025-04-17T20:00:00+00:00 [running]> on host bd292105672f
+[2025-04-18T02:19:28.840+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='job_scraping' AIRFLOW_CTX_TASK_ID='create_embeddings' AIRFLOW_CTX_EXECUTION_DATE='2025-04-17T20:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-04-17T20:00:00+00:00'
+[2025-04-18T02:19:28.840+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-04-18T02:19:28.845+0000] {job_scraping_dag.py:76} INFO - Starting embeddings processing task
+[2025-04-18T02:19:32.180+0000] {embeddings.py:79} INFO - Connected to Pinecone index: skillmatch-index
+[2025-04-18T02:19:32.360+0000] {embeddings.py:101} INFO - Found 164 job files in S3
+[2025-04-18T02:19:32.445+0000] {embeddings.py:639} INFO - Loaded list of 163 processed files from S3
+[2025-04-18T02:19:32.446+0000] {job_scraping_dag.py:86} INFO - Found 163 previously processed files
+[2025-04-18T02:19:32.446+0000] {job_scraping_dag.py:90} INFO - Found 1 new files to process
+[2025-04-18T02:19:32.447+0000] {job_scraping_dag.py:99} INFO - Processing file: jobs/raw_files/company_research_Meta_20250417_215622.json
+[2025-04-18T02:19:32.513+0000] {embeddings.py:117} INFO - Loaded 3 jobs from jobs/raw_files/company_research_Meta_20250417_215622.json
+[2025-04-18T02:19:32.514+0000] {embeddings.py:267} ERROR - Error processing job data: 'str' object has no attribute 'get'
+[2025-04-18T02:19:32.514+0000] {embeddings.py:308} ERROR - Error processing job 1/3: 'str' object has no attribute 'get'
+[2025-04-18T02:19:32.515+0000] {embeddings.py:267} ERROR - Error processing job data: 'str' object has no attribute 'get'
+[2025-04-18T02:19:32.515+0000] {embeddings.py:308} ERROR - Error processing job 2/3: 'str' object has no attribute 'get'
+[2025-04-18T02:19:32.515+0000] {embeddings.py:267} ERROR - Error processing job data: 'str' object has no attribute 'get'
+[2025-04-18T02:19:32.516+0000] {embeddings.py:308} ERROR - Error processing job 3/3: 'str' object has no attribute 'get'
+[2025-04-18T02:19:32.586+0000] {embeddings.py:141} INFO - Saved embeddings to s3://skillmatchai/jobs/embeddings/company_research_Meta_20250417_215622_embeddings_20250418_021932.json
+[2025-04-18T02:19:32.587+0000] {job_scraping_dag.py:103} INFO - Successfully processed jobs/raw_files/company_research_Meta_20250417_215622.json
+[2025-04-18T02:19:32.667+0000] {embeddings.py:658} INFO - Saved list of 164 processed files to S3
+[2025-04-18T02:19:32.669+0000] {job_scraping_dag.py:110} INFO - Completed processing 1 new files
+[2025-04-18T02:19:32.674+0000] {python.py:237} INFO - Done. Returned value was: [{'status': 'success', 'original_file': 'jobs/raw_files/company_research_Meta_20250417_215622.json', 'embeddings_url': 's3://skillmatchai/jobs/embeddings/company_research_Meta_20250417_215622_embeddings_20250418_021932.json', 'total_jobs': 3, 'processed_jobs': 0, 'vectors_upserted': 0}]
+[2025-04-18T02:19:32.676+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-04-18T02:19:32.700+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=job_scraping, task_id=create_embeddings, run_id=scheduled__2025-04-17T20:00:00+00:00, execution_date=20250417T200000, start_date=20250418T021928, end_date=20250418T021932
+[2025-04-18T02:19:32.748+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 0
+[2025-04-18T02:19:32.762+0000] {taskinstance.py:3503} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-04-18T02:19:32.763+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

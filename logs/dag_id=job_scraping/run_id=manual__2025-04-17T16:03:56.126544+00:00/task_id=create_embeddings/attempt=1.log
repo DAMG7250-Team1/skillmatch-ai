@@ -1,0 +1,72 @@
+[2025-04-17T16:05:11.353+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-04-17T16:05:11.365+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: job_scraping.create_embeddings manual__2025-04-17T16:03:56.126544+00:00 [queued]>
+[2025-04-17T16:05:11.368+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: job_scraping.create_embeddings manual__2025-04-17T16:03:56.126544+00:00 [queued]>
+[2025-04-17T16:05:11.368+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 2
+[2025-04-17T16:05:11.374+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): create_embeddings> on 2025-04-17 16:03:56.126544+00:00
+[2025-04-17T16:05:11.379+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:62: DeprecationWarning: This process (pid=144) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-04-17T16:05:11.380+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'job_scraping', 'create_embeddings', 'manual__2025-04-17T16:03:56.126544+00:00', '--job-id', '33', '--raw', '--subdir', 'DAGS_FOLDER/job_scraping_dag.py', '--cfg-path', '/tmp/tmpdk3ehqze']
+[2025-04-17T16:05:11.381+0000] {standard_task_runner.py:91} INFO - Job 33: Subtask create_embeddings
+[2025-04-17T16:05:11.381+0000] {standard_task_runner.py:64} INFO - Started process 146 to run task
+[2025-04-17T16:05:11.420+0000] {task_command.py:426} INFO - Running <TaskInstance: job_scraping.create_embeddings manual__2025-04-17T16:03:56.126544+00:00 [running]> on host bd292105672f
+[2025-04-17T16:05:11.461+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='job_scraping' AIRFLOW_CTX_TASK_ID='create_embeddings' AIRFLOW_CTX_EXECUTION_DATE='2025-04-17T16:03:56.126544+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-04-17T16:03:56.126544+00:00'
+[2025-04-17T16:05:11.462+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-04-17T16:05:11.468+0000] {job_scraping_dag.py:76} INFO - Starting embeddings processing task
+[2025-04-17T16:05:15.489+0000] {embeddings.py:79} INFO - Connected to Pinecone index: skillmatch-index
+[2025-04-17T16:05:15.915+0000] {embeddings.py:101} INFO - Found 114 job files in S3
+[2025-04-17T16:05:16.017+0000] {embeddings.py:639} INFO - Loaded list of 110 processed files from S3
+[2025-04-17T16:05:16.018+0000] {job_scraping_dag.py:86} INFO - Found 110 previously processed files
+[2025-04-17T16:05:16.018+0000] {job_scraping_dag.py:90} INFO - Found 4 new files to process
+[2025-04-17T16:05:16.018+0000] {job_scraping_dag.py:99} INFO - Processing file: jobs/raw_files/jobright_job_1_20250417_160433.json
+[2025-04-17T16:05:16.107+0000] {embeddings.py:117} INFO - Loaded 1 jobs from jobs/raw_files/jobright_job_1_20250417_160433.json
+[2025-04-17T16:05:17.659+0000] {_client.py:1026} INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[2025-04-17T16:05:17.685+0000] {embeddings.py:188} INFO - Extracted 30 skills
+[2025-04-17T16:05:18.118+0000] {_client.py:1026} INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+[2025-04-17T16:05:18.123+0000] {embeddings.py:306} INFO - Processed job 1/1: Software Engineer at JPMorganChase
+[2025-04-17T16:05:18.449+0000] {embeddings.py:141} INFO - Saved embeddings to s3://skillmatchai/jobs/embeddings/jobright_job_1_20250417_160433_embeddings_20250417_160518.json
+[2025-04-17T16:05:18.911+0000] {embeddings.py:286} INFO - Upserted 1 unique jobs to Pinecone
+[2025-04-17T16:05:18.911+0000] {job_scraping_dag.py:103} INFO - Successfully processed jobs/raw_files/jobright_job_1_20250417_160433.json
+[2025-04-17T16:05:18.911+0000] {job_scraping_dag.py:99} INFO - Processing file: jobs/raw_files/jobright_job_2_20250417_160447.json
+[2025-04-17T16:05:18.995+0000] {embeddings.py:117} INFO - Loaded 1 jobs from jobs/raw_files/jobright_job_2_20250417_160447.json
+[2025-04-17T16:05:19.340+0000] {_client.py:1026} INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[2025-04-17T16:05:19.345+0000] {embeddings.py:188} INFO - Extracted 5 skills
+[2025-04-17T16:05:19.942+0000] {_client.py:1026} INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+[2025-04-17T16:05:20.015+0000] {embeddings.py:306} INFO - Processed job 1/1: Forward Deployed AI/ML Engineer at Groq
+[2025-04-17T16:05:20.242+0000] {embeddings.py:141} INFO - Saved embeddings to s3://skillmatchai/jobs/embeddings/jobright_job_2_20250417_160447_embeddings_20250417_160520.json
+[2025-04-17T16:05:20.466+0000] {embeddings.py:286} INFO - Upserted 1 unique jobs to Pinecone
+[2025-04-17T16:05:20.467+0000] {job_scraping_dag.py:103} INFO - Successfully processed jobs/raw_files/jobright_job_2_20250417_160447.json
+[2025-04-17T16:05:20.467+0000] {job_scraping_dag.py:99} INFO - Processing file: jobs/raw_files/jobright_job_3_20250417_160503.json
+[2025-04-17T16:05:20.566+0000] {embeddings.py:117} INFO - Loaded 1 jobs from jobs/raw_files/jobright_job_3_20250417_160503.json
+[2025-04-17T16:05:21.414+0000] {_client.py:1026} INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[2025-04-17T16:05:21.417+0000] {embeddings.py:188} INFO - Extracted 13 skills
+[2025-04-17T16:05:21.659+0000] {_client.py:1026} INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+[2025-04-17T16:05:21.684+0000] {embeddings.py:306} INFO - Processed job 1/1: Front- End UI Developer- Angular- (Hybrid) at Citi
+[2025-04-17T16:05:21.884+0000] {embeddings.py:141} INFO - Saved embeddings to s3://skillmatchai/jobs/embeddings/jobright_job_3_20250417_160503_embeddings_20250417_160521.json
+[2025-04-17T16:05:22.047+0000] {embeddings.py:286} INFO - Upserted 1 unique jobs to Pinecone
+[2025-04-17T16:05:22.047+0000] {job_scraping_dag.py:103} INFO - Successfully processed jobs/raw_files/jobright_job_3_20250417_160503.json
+[2025-04-17T16:05:22.048+0000] {job_scraping_dag.py:99} INFO - Processing file: jobs/raw_files/jobright_jobs_20250417_160508.json
+[2025-04-17T16:05:22.118+0000] {embeddings.py:117} INFO - Loaded 3 jobs from jobs/raw_files/jobright_jobs_20250417_160508.json
+[2025-04-17T16:05:23.946+0000] {_client.py:1026} INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[2025-04-17T16:05:23.970+0000] {embeddings.py:188} INFO - Extracted 30 skills
+[2025-04-17T16:05:24.397+0000] {_client.py:1026} INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+[2025-04-17T16:05:24.469+0000] {embeddings.py:306} INFO - Processed job 1/3: Software Engineer at JPMorganChase
+[2025-04-17T16:05:24.833+0000] {_client.py:1026} INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[2025-04-17T16:05:24.836+0000] {embeddings.py:188} INFO - Extracted 5 skills
+[2025-04-17T16:05:25.081+0000] {_client.py:1026} INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+[2025-04-17T16:05:25.084+0000] {embeddings.py:306} INFO - Processed job 2/3: Forward Deployed AI/ML Engineer at Groq
+[2025-04-17T16:05:25.705+0000] {_client.py:1026} INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[2025-04-17T16:05:25.715+0000] {embeddings.py:188} INFO - Extracted 13 skills
+[2025-04-17T16:05:26.214+0000] {_client.py:1026} INFO - HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+[2025-04-17T16:05:26.218+0000] {embeddings.py:306} INFO - Processed job 3/3: Front- End UI Developer- Angular- (Hybrid) at Citi
+[2025-04-17T16:05:26.667+0000] {embeddings.py:141} INFO - Saved embeddings to s3://skillmatchai/jobs/embeddings/jobright_jobs_20250417_160508_embeddings_20250417_160526.json
+[2025-04-17T16:05:26.863+0000] {embeddings.py:286} INFO - Upserted 3 unique jobs to Pinecone
+[2025-04-17T16:05:26.864+0000] {job_scraping_dag.py:103} INFO - Successfully processed jobs/raw_files/jobright_jobs_20250417_160508.json
+[2025-04-17T16:05:27.010+0000] {embeddings.py:658} INFO - Saved list of 114 processed files to S3
+[2025-04-17T16:05:27.011+0000] {job_scraping_dag.py:110} INFO - Completed processing 4 new files
+[2025-04-17T16:05:27.020+0000] {python.py:237} INFO - Done. Returned value was: [{'status': 'success', 'original_file': 'jobs/raw_files/jobright_job_1_20250417_160433.json', 'embeddings_url': 's3://skillmatchai/jobs/embeddings/jobright_job_1_20250417_160433_embeddings_20250417_160518.json', 'total_jobs': 1, 'processed_jobs': 1, 'vectors_upserted': 1}, {'status': 'success', 'original_file': 'jobs/raw_files/jobright_job_2_20250417_160447.json', 'embeddings_url': 's3://skillmatchai/jobs/embeddings/jobright_job_2_20250417_160447_embeddings_20250417_160520.json', 'total_jobs': 1, 'processed_jobs': 1, 'vectors_upserted': 1}, {'status': 'success', 'original_file': 'jobs/raw_files/jobright_job_3_20250417_160503.json', 'embeddings_url': 's3://skillmatchai/jobs/embeddings/jobright_job_3_20250417_160503_embeddings_20250417_160521.json', 'total_jobs': 1, 'processed_jobs': 1, 'vectors_upserted': 1}, {'status': 'success', 'original_file': 'jobs/raw_files/jobright_jobs_20250417_160508.json', 'embeddings_url': 's3://skillmatchai/jobs/embeddings/jobright_jobs_20250417_160508_embeddings_20250417_160526.json', 'total_jobs': 3, 'processed_jobs': 3, 'vectors_upserted': 3}]
+[2025-04-17T16:05:27.023+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-04-17T16:05:27.045+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=job_scraping, task_id=create_embeddings, run_id=manual__2025-04-17T16:03:56.126544+00:00, execution_date=20250417T160356, start_date=20250417T160511, end_date=20250417T160527
+[2025-04-17T16:05:27.066+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 0
+[2025-04-17T16:05:27.077+0000] {taskinstance.py:3503} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-04-17T16:05:27.078+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

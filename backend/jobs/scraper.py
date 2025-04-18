@@ -11,10 +11,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
+import time 
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException, StaleElementReferenceException, WebDriverException
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.options import Options 
  
 
 # Add the parent directory to the Python path
@@ -104,7 +104,7 @@ def scrape_jobs():
         
         # Take screenshot for debugging
         driver.save_screenshot("/tmp/jobright_homepage.png")
-        logger.info("Saved screenshot of JobRight homepage")
+        logger.info("Saved screenshot of JobRight homepage") 
         
         # Click on Sign In button
         logger.info("Looking for Sign In button")

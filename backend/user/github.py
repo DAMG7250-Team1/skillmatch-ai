@@ -15,7 +15,7 @@ load_dotenv()
 
 class GitHubProcessor:
     def __init__(self):
-        self.github_token = os.getenv('GITHUB_ACCESS_TOKEN')
+        self.github_token = os.getenv('GB_ACCESS_TOKEN')
         if not self.github_token:
             raise ValueError("GitHub access token not found in environment variables")
         

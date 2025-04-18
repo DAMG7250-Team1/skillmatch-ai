@@ -1,0 +1,53 @@
+[2025-04-18T01:48:15.507+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2025-04-18T01:48:15.515+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: job_scraping.create_embeddings scheduled__2025-04-17T20:00:00+00:00 [queued]>
+[2025-04-18T01:48:15.517+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: job_scraping.create_embeddings scheduled__2025-04-17T20:00:00+00:00 [queued]>
+[2025-04-18T01:48:15.517+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 2
+[2025-04-18T01:48:15.521+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): create_embeddings> on 2025-04-17 20:00:00+00:00
+[2025-04-18T01:48:15.524+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:62: DeprecationWarning: This process (pid=174) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-04-18T01:48:15.525+0000] {standard_task_runner.py:64} INFO - Started process 176 to run task
+[2025-04-18T01:48:15.525+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'job_scraping', 'create_embeddings', 'scheduled__2025-04-17T20:00:00+00:00', '--job-id', '43', '--raw', '--subdir', 'DAGS_FOLDER/job_scraping_dag.py', '--cfg-path', '/tmp/tmp6xt3vda7']
+[2025-04-18T01:48:15.525+0000] {standard_task_runner.py:91} INFO - Job 43: Subtask create_embeddings
+[2025-04-18T01:48:15.544+0000] {task_command.py:426} INFO - Running <TaskInstance: job_scraping.create_embeddings scheduled__2025-04-17T20:00:00+00:00 [running]> on host bd292105672f
+[2025-04-18T01:48:15.571+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='job_scraping' AIRFLOW_CTX_TASK_ID='create_embeddings' AIRFLOW_CTX_EXECUTION_DATE='2025-04-17T20:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2025-04-17T20:00:00+00:00'
+[2025-04-18T01:48:15.571+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2025-04-18T01:48:15.576+0000] {job_scraping_dag.py:76} INFO - Starting embeddings processing task
+[2025-04-18T01:48:18.344+0000] {embeddings.py:79} INFO - Connected to Pinecone index: skillmatch-index
+[2025-04-18T01:48:18.477+0000] {embeddings.py:105} ERROR - Error listing S3 job files: An error occurred (RequestTimeTooSkewed) when calling the ListObjectsV2 operation: The difference between the request time and the current time is too large.
+[2025-04-18T01:48:18.478+0000] {job_scraping_dag.py:113} ERROR - Error in embeddings processing task: An error occurred (RequestTimeTooSkewed) when calling the ListObjectsV2 operation: The difference between the request time and the current time is too large.
+[2025-04-18T01:48:18.478+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2025-04-18T01:48:18.478+0000] {taskinstance.py:2905} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 465, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 432, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 401, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 235, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 252, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/job_scraping_dag.py", line 78, in process_embeddings_task
+    all_job_files = processor.list_s3_job_files()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/backend/jobs/embeddings.py", line 91, in list_s3_job_files
+    response = self.s3_client.list_objects_v2(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/botocore/client.py", line 565, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/botocore/client.py", line 1021, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (RequestTimeTooSkewed) when calling the ListObjectsV2 operation: The difference between the request time and the current time is too large.
+[2025-04-18T01:48:18.491+0000] {taskinstance.py:1206} INFO - Marking task as UP_FOR_RETRY. dag_id=job_scraping, task_id=create_embeddings, run_id=scheduled__2025-04-17T20:00:00+00:00, execution_date=20250417T200000, start_date=20250418T014815, end_date=20250418T014818
+[2025-04-18T01:48:18.499+0000] {standard_task_runner.py:110} ERROR - Failed to execute job 43 for task create_embeddings (An error occurred (RequestTimeTooSkewed) when calling the ListObjectsV2 operation: The difference between the request time and the current time is too large.; 176)
+[2025-04-18T01:48:18.540+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 1
+[2025-04-18T01:48:18.552+0000] {taskinstance.py:3503} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-04-18T01:48:18.552+0000] {local_task_job_runner.py:222} INFO - ::endgroup::
