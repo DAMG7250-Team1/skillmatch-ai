@@ -9,13 +9,13 @@ import numpy as np
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Mock dependencies before importing
-with patch('backend.jobs.embeddings.JobEmbeddingsProcessor'), \
-     patch('backend.user.resume.ResumeProcessor'), \
-     patch('backend.user.github.GitHubProcessor'), \
-     patch('backend.user.user_embedding.UserEmbeddingProcessor'), \
-     patch('backend.jobs.job_matching.JobMatcher'), \
-     patch('backend.web.company_agent.CompanyJobAgent'), \
-     patch('backend.cover.cover_letter.CoverProfileAgent'), \
+with patch('jobs.embeddings.JobEmbeddingsProcessor'), \
+     patch('user.resume.ResumeProcessor'), \
+     patch('user.github.GitHubProcessor'), \
+     patch('user.user_embedding.UserEmbeddingProcessor'), \
+     patch('jobs.job_matching.JobMatcher'), \
+     patch('web.company_agent.CompanyJobAgent'), \
+     patch('cover.cover_letter.CoverProfileAgent'), \
      patch('pinecone.Pinecone'), \
      patch('boto3.client'):
     
