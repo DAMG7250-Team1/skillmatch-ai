@@ -48,5 +48,7 @@ jobs:
                           AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }},
                           AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }},
                           TAVILY_API_KEY=${{ secrets.TAVILY_API_KEY }}"
+        echo "✅ Deployment finished"
+
     - name: Show deployed service URL 
       run: echo "Service deployed to ${{ steps.deploy.outputs.url}}"
