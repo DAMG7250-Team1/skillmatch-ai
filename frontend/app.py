@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 # Load environment variables
 load_dotenv()
 BACKEND_API_URL = os.getenv('BACKEND_API_URL', 'https://skillmatch-xqv7xxttja-ue.a.run.app')
- 
+# BACKEND_API_URL = 'https://skillmatch-xqv7xxttja-ue.a.run.app'
 # Initialize session state for persistence across reruns
 for key, default in [
     ("resume_markdown_url", ""),
@@ -159,12 +159,25 @@ def display_job_match(match: dict):
     title = match.get("job_title", "N/A")
     company = meta.get("company", "N/A")
     score = match.get("similarity_score", 0.0)
-    match_category = match.get("match_category", match.get("similarity_category", "unknown")).capitalize()
     job_title = match.get("job_title", "N/A")  # <- add this
     company = match.get("company", "N/A")
  
+    critical_fields = [
+        meta.get("location"),
+        meta.get("job_type"),
+        meta.get("work_mode"),
+        meta.get("seniority"),
+        meta.get("experience"),
+        meta.get("responsibilities"),
+        meta.get("qualifications")
+    ]
+    if all(not v or v.strip() == "" for v in critical_fields):
+        logger.warning(f"Skipping job {job_id} due to empty metadata.")
+        return  # skip rendering this card
+ 
+ 
     with st.container():
-        with st.expander(f"🔍 {title} @ {company} — ({match_category})"):
+        with st.expander(f"🔍 {title} @ {company} — Score: {score:.2f}"):
             st.markdown(f"""
             - **Location:** {meta.get('location','N/A')}
             - **Type:** {meta.get('job_type','N/A')}
@@ -175,7 +188,7 @@ def display_job_match(match: dict):
             st.markdown("---")
             st.markdown(format_bullet_section("Responsibilities", meta.get("responsibilities","").split(",")))
             st.markdown(format_bullet_section("Qualifications", meta.get("qualifications","").split(",")))
-            st.markdown(format_bullet_section("Matching Skills", match.get("skills", [])))
+            st.markdown(format_bullet_section("Matching Skills", meta.get("skills", []).split(",")))
  
             processing = job_id in st.session_state.processing_jobs
             has_res   = job_id in st.session_state.job_results
@@ -429,6 +442,8 @@ def main():
         st.subheader("🔍 Matching Jobs")
         for m in st.session_state.matches:
             display_job_match(m)
+   
+   
  
 if __name__ == "__main__":
     main()
