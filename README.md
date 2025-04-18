@@ -58,6 +58,9 @@
 [![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)](https://platform.openai.com/)
 [![Pinecone](https://img.shields.io/badge/Pinecone-0A2239?style=for-the-badge&logoColor=white)](https://www.pinecone.io/)
 [![Selenium](https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white)](https://www.selenium.dev/)
+[![Tavily](https://img.shields.io/badge/Tavily-5A67D8?style=for-the-badge&logoColor=white)](https://www.tavily.com/)
+[![LangChain](https://img.shields.io/badge/LangChain-2B6CB0?style=for-the-badge&logoColor=white)](https://www.langchain.dev/)
+
 
 
 ---
