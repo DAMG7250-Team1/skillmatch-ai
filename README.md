@@ -121,6 +121,7 @@ skillmatch-ai/
 ---
 
 ## 🏗 Architecture Diagram
+![image (5)](https://github.com/user-attachments/assets/0b0b046b-5f71-4df2-9556-330ecc64fb70)
 
 
 ---
