@@ -10,7 +10,7 @@
 
 - **Frontend**: 
 
-- **Backend**: 
+- **Backend**: https://skillmatch-xqv7xxttja-ue.a.run.app
 
 - **Airflow**: http://34.139.104.57:8081/home
 
@@ -93,6 +93,7 @@ TAVILY_API_KEY=your_tavily_key
 ```
 
 5. **Run Airflow (optional for daily jobs update):**
+
 Configure Airflow DAGs to trigger `scraper.py` and `embeddings.py` for daily job scraping and embedding generation.
 
 ---
@@ -120,7 +121,7 @@ skillmatch-ai/
 ---
 
 ## 🏗 Architecture Diagram
-*(To be added)*
+
 
 ---
 
