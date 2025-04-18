@@ -1,6 +1,10 @@
 # SkillMatchAI
 **TEAM 1 – DAMG7245**
-
+**SkillMatchAI** is an AI-powered job recommendation system that uses user resumes and GitHub profiles to intelligently match candidates to suitable job opportunities. It leverages OpenAI embeddings, Pinecone vector search, and custom NLP logic to:
+- Extract skills, qualifications, and experience from resumes and GitHub profiles
+- Embed and match profiles with jobs scraped from JobRight.ai
+- Generate cover letters tailored to job descriptions
+- Provide actionable profile improvement suggestions
 ## 🔗 Links
 
 - **Frontend**: 
@@ -13,14 +17,8 @@
 
 - **Google Codelab**: 
 
-## 📘 Project Description / Overview
-**SkillMatchAI** is an AI-powered job recommendation system that uses user resumes and GitHub profiles to intelligently match candidates to suitable job opportunities. It leverages OpenAI embeddings, Pinecone vector search, and custom NLP logic to:
+## 📘 Project Description 
 
-- Extract skills, qualifications, and experience from resumes and GitHub profiles
-- Embed and match profiles with jobs scraped from JobRight.ai
-- Generate cover letters tailored to job descriptions
-- Provide actionable profile improvement suggestions
-> *For any issues or enhancements, please raise a GitHub issue or submit a PR.*
 ### 1. Job Scraping System
 - Automated scraping of job listings from JobRight.ai
 - Scheduled Airflow DAG running every 4 hours
