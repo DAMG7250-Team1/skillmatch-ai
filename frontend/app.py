@@ -19,9 +19,9 @@ BACKEND_API_URL = os.getenv('BACKEND_API_URL', ' https://skillmatch-xqv7xxttja-u
 # Initialize session state for persistence across reruns
 for key, default in [
     ("resume_markdown_url", ""),
-    ("github_markdown_url", ""),
+    ("github_markdown_url", ""), 
     ("matches", []),
-    ("processing_jobs", set()),
+    ("processing_jobs", set()), 
     ("job_results", {}),
     ("displayed_jobs", 10)
 ]:
