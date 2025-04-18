@@ -8638,3 +8638,27 @@
 [2025-04-18T14:50:00.461+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:50:00.461+0000] {dag.py:3089} INFO - Sync 1 DAGs
 [2025-04-18T14:50:00.472+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:50:00.472+0000] {dag.py:3947} INFO - Setting next_dagrun for job_scraping to 2025-04-18 12:00:00+00:00, run_after=2025-04-18 16:00:00+00:00
 [2025-04-18T14:50:00.478+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/job_scraping_dag.py took 0.616 seconds
+[2025-04-18T14:50:30.564+0000] {processor.py:161} INFO - Started process (PID=4209) to work on /opt/airflow/dags/job_scraping_dag.py
+[2025-04-18T14:50:30.567+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/job_scraping_dag.py for tasks to queue
+[2025-04-18T14:50:30.569+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:50:30.568+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/job_scraping_dag.py
+[2025-04-18T14:50:31.089+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:50:31.089+0000] {job_scraping_dag.py:30} INFO - Successfully imported job modules
+[2025-04-18T14:50:31.091+0000] {processor.py:840} INFO - DAG(s) 'job_scraping' retrieved from /opt/airflow/dags/job_scraping_dag.py
+[2025-04-18T14:50:31.099+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:50:31.099+0000] {dag.py:3089} INFO - Sync 1 DAGs
+[2025-04-18T14:50:31.105+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:50:31.105+0000] {dag.py:3947} INFO - Setting next_dagrun for job_scraping to 2025-04-18 12:00:00+00:00, run_after=2025-04-18 16:00:00+00:00
+[2025-04-18T14:50:31.111+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/job_scraping_dag.py took 0.552 seconds
+[2025-04-18T14:51:01.386+0000] {processor.py:161} INFO - Started process (PID=4211) to work on /opt/airflow/dags/job_scraping_dag.py
+[2025-04-18T14:51:01.391+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/job_scraping_dag.py for tasks to queue
+[2025-04-18T14:51:01.397+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:51:01.397+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/job_scraping_dag.py
+[2025-04-18T14:51:02.098+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:51:02.098+0000] {job_scraping_dag.py:30} INFO - Successfully imported job modules
+[2025-04-18T14:51:02.101+0000] {processor.py:840} INFO - DAG(s) 'job_scraping' retrieved from /opt/airflow/dags/job_scraping_dag.py
+[2025-04-18T14:51:02.111+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:51:02.111+0000] {dag.py:3089} INFO - Sync 1 DAGs
+[2025-04-18T14:51:02.119+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:51:02.119+0000] {dag.py:3947} INFO - Setting next_dagrun for job_scraping to 2025-04-18 12:00:00+00:00, run_after=2025-04-18 16:00:00+00:00
+[2025-04-18T14:51:02.125+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/job_scraping_dag.py took 0.753 seconds
+[2025-04-18T14:51:32.371+0000] {processor.py:161} INFO - Started process (PID=4213) to work on /opt/airflow/dags/job_scraping_dag.py
+[2025-04-18T14:51:32.376+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/job_scraping_dag.py for tasks to queue
+[2025-04-18T14:51:32.379+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:51:32.379+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/job_scraping_dag.py
+[2025-04-18T14:51:33.007+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:51:33.007+0000] {job_scraping_dag.py:30} INFO - Successfully imported job modules
+[2025-04-18T14:51:33.010+0000] {processor.py:840} INFO - DAG(s) 'job_scraping' retrieved from /opt/airflow/dags/job_scraping_dag.py
+[2025-04-18T14:51:33.020+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:51:33.020+0000] {dag.py:3089} INFO - Sync 1 DAGs
+[2025-04-18T14:51:33.038+0000] {logging_mixin.py:188} INFO - [2025-04-18T14:51:33.038+0000] {dag.py:3947} INFO - Setting next_dagrun for job_scraping to 2025-04-18 12:00:00+00:00, run_after=2025-04-18 16:00:00+00:00
+[2025-04-18T14:51:33.045+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/job_scraping_dag.py took 0.689 seconds
