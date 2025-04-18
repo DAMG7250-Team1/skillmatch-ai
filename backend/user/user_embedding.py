@@ -1339,22 +1339,41 @@ Text:
             logger.error(f"Error extracting skills: {str(e)}")
             return []
     
+    # def get_combined_embedding(self, resume_text: str, github_text: Optional[str] = None) -> List[float]:
+    #     """
+    #     Generate a combined embedding by concatenating resume and GitHub markdown texts,
+    #     then using OpenAI's embeddings API.
+    #     """
+    #     combined_text = resume_text + " " + (github_text or "")
+    #     try:
+    #         response = self.openai_client.embeddings.create(
+    #             model="text-embedding-3-large",
+    #             input=combined_text
+    #         )
+    #         embedding = response.data[0].embedding
+    #         logger.info("Generated combined embedding for user profile")
+    #         return embedding
+    #     except Exception as e:
+    #         logger.error(f"Error generating combined embedding: {str(e)}")
+    #         raise
+
+
     def get_combined_embedding(self, resume_text: str, github_text: Optional[str] = None) -> List[float]:
-        """
-        Generate a combined embedding by concatenating resume and GitHub markdown texts,
-        then using OpenAI's embeddings API.
-        """
-        combined_text = resume_text + " " + (github_text or "")
+        """Generate a combined embedding for the user's profile."""
+        combined_text = resume_text + "\n\n" + (github_text or "")
+        combined_text = self.truncate_text_to_token_limit(combined_text)  # ← 👈 Add this line
+        logger.info(f"🔧 Truncated combined text to {len(combined_text)} characters before embedding")
+
         try:
             response = self.openai_client.embeddings.create(
                 model="text-embedding-3-large",
                 input=combined_text
             )
             embedding = response.data[0].embedding
-            logger.info("Generated combined embedding for user profile")
+            logger.info("✅ Successfully generated combined embedding")
             return embedding
         except Exception as e:
-            logger.error(f"Error generating combined embedding: {str(e)}")
+            logger.error(f"❌ Error generating combined embedding: {str(e)}")
             raise
 
     def extract_experience_details(self, resume_text: str) -> Dict[str, Union[float, str]]:
@@ -1526,7 +1545,20 @@ Text:
         except Exception as e:
             logger.error(f"Error saving combined profile to S3: {str(e)}")
             raise
-    
+
+    @staticmethod 
+    def truncate_text_to_token_limit(text: str, max_tokens: int = 8192, buffer: int = 100) -> str:
+        try:
+            max_tokens = int(max_tokens)
+            buffer = int(buffer)
+            approx_char_limit = (max_tokens - buffer) * 4
+            return text[:approx_char_limit]
+        except Exception as e:
+            logger.error(f"Error in truncation: {e}")
+            return text[:50000]  # fallback
+
+
+
     def upsert_profile_to_pinecone(self, user_id: str, combined_text: str, embedding: List[float],
                                      extra_metadata: Dict[str, Any]) -> None:
         """
@@ -1591,7 +1623,8 @@ Text:
             combined_embedding = self.get_combined_embedding(resume_text, github_text)
             
             # Combine the texts.
-            combined_text = resume_text + "\n" + github_text
+            combined_text = resume_text + "\n\n" + (github_text or "")
+            combined_text = self.truncate_text_to_token_limit(combined_text)
             
             # Save combined profile to S3.
             user_id = "test_user_123"  # Modify as needed.

@@ -1,59 +1,54 @@
-from langchain.llms import OpenAI
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
+import openai
+import os
 
-# Define the prompt template for generating profile improvement suggestions.
-profile_improvement_template = """
-You are an expert career advisor. Given the candidate's profile and the job description provided, generate a concise bullet list of actionable recommendations 
-on how the candidate can improve their profile to become more suitable for the position.
+# Set your API key
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+def generate_improvement_suggestions(profile_text: str, job_description: str) -> str:
+    system_prompt = (
+        "You are an expert career coach helping candidates improve their profiles to better match job descriptions. "
+        "Given a candidate's profile and the job description, suggest improvements they can make to their resume, GitHub, "
+        "skills, or experience to increase their chances of getting selected for an interview. "
+        "Provide your feedback in the form of bullet points."
+    )
+
+    user_prompt = f"""
 Candidate Profile:
-{profile}
+{profile_text}
 
 Job Description:
 {job_description}
 
-Provide your answer as a bullet list of suggestions.
+Please provide concise, actionable suggestions in bullet points.
 """
 
-# Create a PromptTemplate instance.
-profile_improvement_prompt = PromptTemplate(
-    input_variables=["profile", "job_description"],
-    template=profile_improvement_template
-)
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=0.7
+        )
 
-# Initialize the LLM (here we use OpenAI's GPT-3.5-turbo model; set your desired parameters).
-llm = OpenAI(temperature=0.7, model_name="gpt-3.5-turbo")
+        return response.choices[0].message.content.strip()
 
-# Create the LLMChain for profile improvement.
-profile_improvement_chain = LLMChain(
-    llm=llm, 
-    prompt=profile_improvement_prompt, 
-    output_key="improvement_suggestions"
-)
-
-def generate_improvement_suggestions(profile: str, job_description: str) -> str:
-    """
-    Given a candidate's profile and a job description, 
-    generate a bullet list of improvement suggestions.
-    """
-    inputs = {"profile": profile, "job_description": job_description}
-    result = profile_improvement_chain.run(inputs)
-    return result
+    except Exception as e:
+        return f"❌ Error generating suggestions: {str(e)}"
 
 # --- Example usage ---
 if __name__ == "__main__":
-    candidate_profile = """
-    John Doe is a software engineer with 5 years of experience in full-stack development.
-    He is skilled in Python, JavaScript, and has a strong background in cloud-based application design.
-    He has successfully led projects at mid-sized tech companies and is passionate about building scalable systems.
+    profile = """
+    Jane Doe is a junior web developer with 1.5 years of experience. She's skilled in HTML, CSS, and JavaScript. 
+    Her GitHub includes a few frontend projects. She holds a Bachelor’s degree in Computer Science.
     """
-    job_description = """
-    We are seeking a Senior Software Engineer with a focus on building high-performance web applications.
-    The ideal candidate should have experience in Python, cloud technologies, and microservices architecture.
-    Leadership skills and experience in project management are highly valued.
+
+    job = """
+    We are seeking a mid-level full-stack developer with 3+ years of experience in React, Node.js, and AWS.
+    Familiarity with CI/CD pipelines and Docker is required.
     """
-    
-    suggestions = generate_improvement_suggestions(candidate_profile, job_description)
-    print("Profile Improvement Suggestions:")
+
+    suggestions = generate_improvement_suggestions(profile, job)
+    print("=== Profile Improvement Suggestions ===")
     print(suggestions)
