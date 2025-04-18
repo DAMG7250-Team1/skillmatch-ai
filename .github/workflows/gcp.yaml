@@ -1,19 +1,21 @@
 name: Build and Deploy to Google Cloud Run
+
 on:
-  #push:
-   # branches: [ main ]
   push:
     branches: [ main ]
+
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   SERVICE_NAME: skillmatch
   REGION: us-east1
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+
     - name: Google Auth
       id: auth
       uses: google-github-actions/auth@v1
@@ -23,14 +25,16 @@ jobs:
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
       with:
-        #service_account_key: ${{ secrets.GCP_CLOUD_RUN_KEY }}
         project_id: ${{ secrets.GCP_PROJECT_ID }}
+
     - name: Configure Docker to use gcloud
       run: gcloud auth configure-docker
+
     - name: Build Docker image
       run: |
         docker build -t gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ github.sha }} -f backend/Dockerfile .
         docker push gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ github.sha }}
+
     - name: Deploy to Google Cloud Run
       id: deploy
       run: |
@@ -38,13 +42,14 @@ jobs:
           --image gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ github.sha }} \
           --platform managed \
           --region $REGION \
+          --memory 2Gi \ # ✅ memory limit increased
           --allow-unauthenticated \
           --port 8000 \
           --async \
           --set-env-vars="
                           OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }},
-                          PINECONE_API_KEY=${{secrets.PINECONE_API_KEY }},
-                          PINECONE_INDEX_NAME=${{secrets.PINECONE_INDEX}},
+                          PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }},
+                          PINECONE_INDEX_NAME=${{ secrets.PINECONE_INDEX }},
                           AWS_BUCKET_NAME=${{ secrets.AWS_BUCKET_NAME }},
                           GB_ACCESS_TOKEN=${{ secrets.GB_ACCESS_TOKEN }},
                           AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }},
@@ -59,7 +64,6 @@ jobs:
       timeout-minutes: 10
       run: |
         echo "Waiting for deployment to complete..."
-        # Poll for deployment status instead of using operations wait
         RETRIES=20
         RETRY_INTERVAL=30
         DEPLOYED=false
@@ -84,10 +88,8 @@ jobs:
         
         echo "✅ Deployment finished successfully"
         
-        # Get the URL of the service
         SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region $REGION --format="value(status.url)")
         echo "url=$SERVICE_URL" >> $GITHUB_OUTPUT
 
     - name: Show deployed service URL 
       run: echo "Service deployed to ${{ steps.wait.outputs.url }}"
-      
