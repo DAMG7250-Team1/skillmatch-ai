@@ -3750,3 +3750,11 @@
 [2025-04-18T09:28:12.596+0000] {logging_mixin.py:188} INFO - [2025-04-18T09:28:12.596+0000] {dag.py:3089} INFO - Sync 1 DAGs
 [2025-04-18T09:28:12.603+0000] {logging_mixin.py:188} INFO - [2025-04-18T09:28:12.603+0000] {dag.py:3947} INFO - Setting next_dagrun for job_scraping to 2025-04-18 08:00:00+00:00, run_after=2025-04-18 12:00:00+00:00
 [2025-04-18T09:28:12.612+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/job_scraping_dag.py took 0.740 seconds
+[2025-04-18T09:28:42.942+0000] {processor.py:161} INFO - Started process (PID=2987) to work on /opt/airflow/dags/job_scraping_dag.py
+[2025-04-18T09:28:42.948+0000] {processor.py:830} INFO - Processing file /opt/airflow/dags/job_scraping_dag.py for tasks to queue
+[2025-04-18T09:28:42.953+0000] {logging_mixin.py:188} INFO - [2025-04-18T09:28:42.952+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/airflow/dags/job_scraping_dag.py
+[2025-04-18T09:28:43.861+0000] {logging_mixin.py:188} INFO - [2025-04-18T09:28:43.861+0000] {job_scraping_dag.py:30} INFO - Successfully imported job modules
+[2025-04-18T09:28:43.864+0000] {processor.py:840} INFO - DAG(s) 'job_scraping' retrieved from /opt/airflow/dags/job_scraping_dag.py
+[2025-04-18T09:28:43.886+0000] {logging_mixin.py:188} INFO - [2025-04-18T09:28:43.886+0000] {dag.py:3089} INFO - Sync 1 DAGs
+[2025-04-18T09:28:43.894+0000] {logging_mixin.py:188} INFO - [2025-04-18T09:28:43.894+0000] {dag.py:3947} INFO - Setting next_dagrun for job_scraping to 2025-04-18 08:00:00+00:00, run_after=2025-04-18 12:00:00+00:00
+[2025-04-18T09:28:43.900+0000] {processor.py:183} INFO - Processing /opt/airflow/dags/job_scraping_dag.py took 0.970 seconds
