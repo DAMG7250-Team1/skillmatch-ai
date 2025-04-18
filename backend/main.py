@@ -25,14 +25,14 @@ import sys
 sys.path.append(str(FSPath(__file__).parent.parent))
 
 # Import our processors from our modules
-from jobs.embeddings import JobEmbeddingsProcessor
-from user.resume import ResumeProcessor
-from user.github import GitHubProcessor
-from user.user_embedding import UserEmbeddingProcessor
-from jobs.job_matching import JobMatcher
-from web.company_agent import CompanyJobAgent
+from backend.jobs.embeddings import JobEmbeddingsProcessor
+from backend.user.resume import ResumeProcessor
+from backend.user.github import GitHubProcessor
+from backend.user.user_embedding import UserEmbeddingProcessor
+from backend.jobs.job_matching import JobMatcher
+from backend.web.company_agent import CompanyJobAgent
 # Import our combined cover letter and feedback generation function (from cover_letter.py, for example)
-from cover.cover_letter import CoverProfileAgent
+from backend.cover.cover_letter import CoverProfileAgent
 
 # Create the FastAPI app
 app = FastAPI(title="Resume Processing API")
