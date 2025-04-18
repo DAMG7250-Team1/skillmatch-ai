@@ -1,11 +1,26 @@
 # SkillMatchAI
+**TEAM 1 – DAMG7245**
 
-SkillMatchAI is an advanced job matching platform that uses AI and vector embeddings to connect job seekers with the most relevant job opportunities. The system automatically scrapes job listings, extracts skills, and creates semantic embeddings to provide intelligent job matching.
+## 🔗 Links
 
-## Architecture
+- **Frontend**: 
 
-The platform consists of several key components:
+- **Backend**: 
 
+- **Airflow**: http://34.139.104.57:8081/home
+
+- **Demo Video**: 
+
+- **Google Codelab**: 
+
+## 📘 Project Description / Overview
+**SkillMatchAI** is an AI-powered job recommendation system that uses user resumes and GitHub profiles to intelligently match candidates to suitable job opportunities. It leverages OpenAI embeddings, Pinecone vector search, and custom NLP logic to:
+
+- Extract skills, qualifications, and experience from resumes and GitHub profiles
+- Embed and match profiles with jobs scraped from JobRight.ai
+- Generate cover letters tailored to job descriptions
+- Provide actionable profile improvement suggestions
+> *For any issues or enhancements, please raise a GitHub issue or submit a PR.*
 ### 1. Job Scraping System
 - Automated scraping of job listings from JobRight.ai
 - Scheduled Airflow DAG running every 4 hours
@@ -26,61 +41,124 @@ The platform consists of several key components:
 - AWS S3 for storage of job data and embeddings
 - CI/CD pipeline with GitHub Actions
 - Airflow for workflow orchestration
+---
 
-## Deployment Options
 
-### Local Development
+
+---
+
+
+
+---
+
+## ⚙️ Setup Instructions (Step-by-Step Guide)
+1. **Clone the Repository:**
 ```bash
-# Clone the repository
 git clone https://github.com/your-org/skillmatch-ai.git
 cd skillmatch-ai
-
-# Create necessary directories
-mkdir -p ./logs ./plugins
-
-# Configure environment variables
-cp .env.example .env
-# Edit .env with your credentials
-
-# Start the services
-docker-compose up -d
 ```
 
-### Production Deployment
-The project includes a CI/CD pipeline that automatically deploys to production:
+2. **Backend Setup:**
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # or .venv\Scripts\activate on Windows
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
 
-1. Push changes to the main branch
-2. GitHub Actions will build, test and deploy to EC2
-3. Access the Airflow UI at http://your-ec2-ip:8081
+3. **Frontend Setup (Streamlit):**
+```bash
+cd frontend
+streamlit run app.py
+```
 
-## Environment Variables
+4. **Set Environment Variables (.env):**
+```env
+OPENAI_API_KEY=your_openai_key
+PINECONE_API_KEY=your_pinecone_key
+GITHUB_ACCESS_TOKEN=your_github_token
+AWS_ACCESS_KEY_ID=your_aws_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret
+AWS_BUCKET_NAME=skillmatchai
+TAVILY_API_KEY=your_tavily_key
+```
 
-The following environment variables are required:
-- `AWS_ACCESS_KEY_ID` - AWS access key
-- `AWS_SECRET_ACCESS_KEY` - AWS secret key
-- `AWS_REGION` - AWS region (default: us-east-1)
-- `PINECONE_API_KEY` - Pinecone API key
-- `OPENAI_API_KEY` - OpenAI API key
-- `GOOGLE_EMAIL` - Email for JobRight.ai
-- `GOOGLE_PASSWORD` - Password for JobRight.ai
+5. **Run Airflow (optional for daily jobs update):**
+Configure Airflow DAGs to trigger `scraper.py` and `embeddings.py` for daily job scraping and embedding generation.
 
-## Airflow DAGs
+---
 
-The project contains the following DAGs:
-- `job_scraping` - Scrapes job listings and processes embeddings (runs every 4 hours)
+## 📂 Directory Structure
+```
+skillmatch-ai/
+├── backend/
+│   ├── main.py             # FastAPI app entry point
+│   ├── orchestrator.py     # LangGraph orchestrator
+│   ├── resume.py           # Resume processing and markdown conversion
+│   ├── github.py           # GitHub repo parsing and markdown
+│   ├── user_embedding.py   # Embedding & Pinecone upsert for user profile
+│   ├── cover_letter.py     # Cover letter & profile improvement agent
+│   ├── job_matching.py     # Job matching logic with score weights
+│   ├── embeddings.py       # Job embedding pipeline
+│   ├── scraper.py          # Job scraper from JobRight.ai
+│   ├── company_agent.py    # Tavily agent for company info
+├── frontend/
+│   ├── app.py              # Streamlit app
+├── requirements.txt
+├── Dockerfile
+```
 
-## Access Links
+---
 
-- Frontend: 
-- Airflow UI: http://34.139.104.57:8081/home
-- Project Video:
-- Codelabs: 
-- Documentation: 
+## 💻 Technologies and Tools
 
-## Team
+[![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://streamlit.io/)
+[![FastAPI](https://img.shields.io/badge/fastapi-109989?style=for-the-badge&logo=FASTAPI&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Apache Airflow](https://img.shields.io/badge/Airflow-017CEE?style=for-the-badge&logo=Apache%20Airflow&logoColor=white)](https://airflow.apache.org/)
+[![Amazon S3](https://img.shields.io/badge/AWS_S3-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)](https://aws.amazon.com/s3/)
+[![Docker](https://img.shields.io/badge/Docker-%232496ED?style=for-the-badge&logo=Docker&color=blue&logoColor=white)](https://www.docker.com)
+[![Google Cloud](https://img.shields.io/badge/Google_Cloud-%234285F4.svg?style=for-the-badge&logo=google-cloud&logoColor=white)](https://cloud.google.com)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/)
+[![BeautifulSoup](https://img.shields.io/badge/BeautifulSoup-8A4182?style=for-the-badge&logo=python&logoColor=white)](https://www.crummy.com/software/BeautifulSoup/)
+[![PyPDF2](https://img.shields.io/badge/PyPDF2-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://pypi.org/project/PyPDF2/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)](https://platform.openai.com/)
+[![Pinecone](https://img.shields.io/badge/Pinecone-0A2239?style=for-the-badge&logoColor=white)](https://www.pinecone.io/)
 
-TEAM 1 - DAMG7245 Final Project
+---
 
-## License
+## 🏗 Architecture Diagram
+*(To be added)*
 
-[MIT License](LICENSE)
+---
+
+## 👥 Team Members
+
+- Member 1: Dhrumil Patel
+  
+- Member 2: Husain
+  
+- Member 3: Sahil Kasliwal
+
+---
+
+## 📜 Disclosures
+```
+WE ATTEST THAT WE HAVEN’T USED ANY OTHER STUDENTS’ WORK IN OUR ASSIGNMENT AND ABIDE BY THE POLICIES LISTED IN THE STUDENT HANDBOOK.
+
+Member1: 33.3%  
+
+Member2: 33.3% 
+
+Member3: 33.3%
+```
+
+---
+
+
+
+
+
+
+
