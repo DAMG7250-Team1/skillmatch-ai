@@ -38,7 +38,7 @@ jobs:
           --platform managed \
           --region $REGION \
           --allow-unauthenticated \
-          --port 8080 \
+          --port 8000 \
           --set-env-vars="
                           OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }},
                           PINECONE_API_KEY=${{secrets.PINECONE_API_KEY }},
