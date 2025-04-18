@@ -3065,22 +3065,38 @@ def main():
             data = resp.json().get("data", {})
             st.session_state.resume_markdown_url = data.get("markdown_url", "")
 
-            st.success("Profile submitted!")
-            st.balloons()
 
-            # Prepare user profile for matching
-            profile = {
+            data = response.json().get("data", {})
+            st.success("✅ Profile submitted successfully!")
+            
+            st.subheader("📊 Profile Summary")
+            st.markdown("### GitHub Info")
+            st.write(f"👤 Username: {github_result['data']['username']}")
+            st.write(f"📦 Repositories: {github_result['data']['repository_count']}")
+            st.write(f"📄 READMEs Processed: {github_result['data']['readme_count']}")
+            st.write(f"📝 GitHub Markdown: {github_result['data']['markdown_url']}")
+
+            st.markdown("### Resume Info")
+            st.write(f"📄 Filename: {data.get('filename')}")
+            st.write(f"☁️ S3 URL: {data.get('resume_url')}")
+            st.write(f"📜 Markdown URL: {data.get('markdown_url')}")
+
+            # Use the full user profile returned by the backend
+            user_profile = {
                 "combined_embedding": data.get("embeddings_info", {}).get("embedding", []),
                 "all_skills": data.get("embeddings_info", {}).get("skills", []),
                 "experience_year": data.get("experience_year", ""),
                 "qualification": data.get("qualification", "")
             }
 
-            # Fetch matches
-            ok, mr = get_job_matches(profile)
-            if ok and mr.get("status") == "success":
-                st.success(f"Found {mr.get('total_matches',0)} matches")
-                st.session_state.matches = mr.get("matches", [])
+
+            st.info("🔍 Finding job matches...")
+            match_success, match_result = get_job_matches(user_profile)
+
+            if match_success and match_result.get("status") == "success":
+                st.success(f"🎯 Found {match_result['total_matches']} job matches")
+                for match in match_result["matches"]:
+                    display_job_match(match)
             else:
                 st.error(f"Matching error: {mr.get('error','Unknown')}")
 

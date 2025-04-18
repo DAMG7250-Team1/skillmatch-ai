@@ -42,6 +42,7 @@ class JobEmbeddingsProcessor:
         # S3 paths
         self.s3_jobs_raw_path = 'jobs/raw_files/'
         self.s3_jobs_embeddings_path = 'jobs/embeddings/'
+        self.s3_processed_files_key = 'jobs/processed_files.json'
         
         # Initialize S3 client
         self.s3_client = boto3.client(
@@ -624,6 +625,41 @@ class JobEmbeddingsProcessor:
                 "error": str(e),
                 "matches": []
             }
+
+    def get_processed_files(self) -> List[str]:
+        """Get list of already processed files from S3"""
+        try:
+            try:
+                # Try to get the existing processed files list
+                response = self.s3_client.get_object(
+                    Bucket=self.aws_bucket_name,
+                    Key=self.s3_processed_files_key
+                )
+                processed_files = json.loads(response['Body'].read().decode('utf-8'))
+                logger.info(f"Loaded list of {len(processed_files)} processed files from S3")
+                return processed_files
+            except Exception as e:
+                # If file doesn't exist or other error, start with empty list
+                logger.info(f"No existing processed files record found, starting fresh: {str(e)}")
+                return []
+        except Exception as e:
+            logger.error(f"Error getting processed files list: {str(e)}")
+            return []
+    
+    def save_processed_files(self, processed_files: List[str]) -> bool:
+        """Save list of processed files to S3"""
+        try:
+            self.s3_client.put_object(
+                Bucket=self.aws_bucket_name,
+                Key=self.s3_processed_files_key,
+                Body=json.dumps(processed_files, ensure_ascii=False),
+                ContentType='application/json'
+            )
+            logger.info(f"Saved list of {len(processed_files)} processed files to S3")
+            return True
+        except Exception as e:
+            logger.error(f"Error saving processed files list: {str(e)}")
+            return False
 
 # Main execution to process job files if run directly
 if __name__ == "__main__":
