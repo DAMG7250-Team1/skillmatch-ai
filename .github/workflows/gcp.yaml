@@ -42,7 +42,7 @@ jobs:
           --image gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ github.sha }} \
           --platform managed \
           --region $REGION \
-          --memory 2Gi \ # ✅ memory limit increased
+          --memory 2Gi \ 
           --allow-unauthenticated \
           --port 8000 \
           --async \
