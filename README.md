@@ -138,11 +138,11 @@ skillmatch-ai/
 ```
 WE ATTEST THAT WE HAVEN’T USED ANY OTHER STUDENTS’ WORK IN OUR ASSIGNMENT AND ABIDE BY THE POLICIES LISTED IN THE STUDENT HANDBOOK.
 
-Member1: 33.3%  
+Dhrumil Patel: 33.3%  
 
-Member2: 33.3% 
+Husain: 33.3% 
 
-Member3: 33.3%
+Sahil Kasliwal: 33.3%
 ```
 
 ---
