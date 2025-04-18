@@ -90,3 +90,4 @@ jobs:
 
     - name: Show deployed service URL 
       run: echo "Service deployed to ${{ steps.wait.outputs.url }}"
+      
