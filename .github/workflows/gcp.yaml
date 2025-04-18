@@ -7,7 +7,7 @@ on:
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   SERVICE_NAME: skill-match
-  REGION: us-central1
+  REGION: us-east1
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -32,13 +32,15 @@ jobs:
         docker build -t gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ github.sha }} -f backend/Dockerfile .
         docker push gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ github.sha }}
     - name: Deploy to Google Cloud Run
+      id: deploy
       run: |
-        gcloud run deploy $SERVICE_NAME \
+        OPERATION_ID=$(gcloud run deploy $SERVICE_NAME \
           --image gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ github.sha }} \
           --platform managed \
           --region $REGION \
           --allow-unauthenticated \
           --port 8000 \
+          --async \
           --set-env-vars="
                           OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }},
                           PINECONE_API_KEY=${{secrets.PINECONE_API_KEY }},
@@ -47,8 +49,23 @@ jobs:
                           GB_ACCESS_TOKEN=${{ secrets.GB_ACCESS_TOKEN }},
                           AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }},
                           AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }},
-                          TAVILY_API_KEY=${{ secrets.TAVILY_API_KEY }}"
-        echo "✅ Deployment finished"
+                          TAVILY_API_KEY=${{ secrets.TAVILY_API_KEY }}" \
+          --format="value(metadata.name)")
+        echo "operation-id=$OPERATION_ID" >> $GITHUB_OUTPUT
+        echo "✅ Deployment started asynchronously"
+
+    - name: Wait for deployment to complete
+      id: wait
+      timeout-minutes: 10
+      run: |
+        echo "Waiting for deployment to complete..."
+        OPERATION_ID=${{ steps.deploy.outputs.operation-id }}
+        gcloud run operations wait $OPERATION_ID --region $REGION
+        echo "✅ Deployment finished successfully"
+        
+        # Get the URL of the service
+        SERVICE_URL=$(gcloud run services describe $SERVICE_NAME --region $REGION --format="value(status.url)")
+        echo "url=$SERVICE_URL" >> $GITHUB_OUTPUT
 
     - name: Show deployed service URL 
-      run: echo "Service deployed to ${{ steps.deploy.outputs.url}}"
+      run: echo "Service deployed to ${{ steps.wait.outputs.url }}"
