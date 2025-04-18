@@ -7,8 +7,12 @@ from unittest.mock import patch, MagicMock, mock_open
 # Add the parent directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Import the GitHub processor
-from backend.user.github import GitHubProcessor
+# Mock dependencies before importing
+with patch('boto3.client'), \
+     patch('pinecone.Pinecone'), \
+     patch('openai.embeddings.create'):
+    # Import the GitHub processor
+    from backend.user.github import GitHubProcessor
 
 class TestGitHubProcessor:
     """

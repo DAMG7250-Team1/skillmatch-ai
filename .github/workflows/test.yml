@@ -20,8 +20,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        pip install pytest pytest-cov pytest-mock
+        pip install -r requirements.txt
+        # Install any additional testing dependencies not in requirements.txt
+        pip install pytest-cov pytest-mock httpx requests-mock
         
     - name: Run unit tests
       run: |
@@ -35,6 +36,7 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         GB_ACCESS_TOKEN: ${{ secrets.GB_ACCESS_TOKEN }}
+        TEST_MODE: "true"
         
     - name: Run integration tests
       run: |
@@ -48,11 +50,21 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         GB_ACCESS_TOKEN: ${{ secrets.GB_ACCESS_TOKEN }}
+        TEST_MODE: "true"
         
     - name: Generate coverage report
       run: |
         cd backend
         python -m pytest tests/ --cov=. --cov-report=xml
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
+        PINECONE_INDEX: ${{ secrets.PINECONE_INDEX }}
+        AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        GB_ACCESS_TOKEN: ${{ secrets.GB_ACCESS_TOKEN }}
+        TEST_MODE: "true"
         
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
