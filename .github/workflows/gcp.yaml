@@ -59,8 +59,29 @@ jobs:
       timeout-minutes: 10
       run: |
         echo "Waiting for deployment to complete..."
-        OPERATION_ID=${{ steps.deploy.outputs.operation-id }}
-        gcloud run operations wait $OPERATION_ID --region $REGION
+        # Poll for deployment status instead of using operations wait
+        RETRIES=20
+        RETRY_INTERVAL=30
+        DEPLOYED=false
+        
+        for i in $(seq 1 $RETRIES); do
+          echo "Checking deployment status (attempt $i/$RETRIES)..."
+          STATUS=$(gcloud run services describe $SERVICE_NAME --region $REGION --format="value(status.conditions[0].status)")
+          
+          if [ "$STATUS" == "True" ]; then
+            DEPLOYED=true
+            break
+          fi
+          
+          echo "Deployment still in progress, waiting ${RETRY_INTERVAL}s..."
+          sleep $RETRY_INTERVAL
+        done
+        
+        if [ "$DEPLOYED" == "false" ]; then
+          echo "Deployment did not complete within the allocated time"
+          exit 1
+        fi
+        
         echo "✅ Deployment finished successfully"
         
         # Get the URL of the service
