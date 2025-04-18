@@ -8,7 +8,7 @@
 - Provide actionable profile improvement suggestions
 ## 🔗 Links
 
-- **Frontend**: 
+- **Frontend**: https://damg7250-team1-skillmatch-ai-frontendapp-arx616.streamlit.app/
 
 - **Backend**: https://skillmatch-xqv7xxttja-ue.a.run.app
 
@@ -16,7 +16,9 @@
 
 - **Demo Video**: 
 
-- **Google Codelab**: 
+- **Google Codelab**: https://codelabs-preview.appspot.com/?file_id=10h_ONepkMa254lWd3V8FwyAvkFKhmze9uw9t0MogVDU#6
+
+- **Google Docs**: https://docs.google.com/document/d/10h_ONepkMa254lWd3V8FwyAvkFKhmze9uw9t0MogVDU/edit?tab=t.0#heading=h.q8w1haghexfz
 
 ## 📘 Project Description 
 
@@ -101,21 +103,58 @@ Configure Airflow DAGs to trigger `scraper.py` and `embeddings.py` for daily job
 ## 📂 Directory Structure
 ```
 skillmatch-ai/
-├── backend/
-│   ├── main.py             # FastAPI app entry point
-│   ├── orchestrator.py     # LangGraph orchestrator
-│   ├── resume.py           # Resume processing and markdown conversion
-│   ├── github.py           # GitHub repo parsing and markdown
-│   ├── user_embedding.py   # Embedding & Pinecone upsert for user profile
-│   ├── cover_letter.py     # Cover letter & profile improvement agent
-│   ├── job_matching.py     # Job matching logic with score weights
-│   ├── embeddings.py       # Job embedding pipeline
-│   ├── scraper.py          # Job scraper from JobRight.ai
-│   ├── company_agent.py    # Tavily agent for company info
-├── frontend/
-│   ├── app.py              # Streamlit app
-├── requirements.txt
-├── Dockerfile
+├── .env                  # Environment variables file
+├── .github/              # GitHub configuration
+│   └── workflows/        # GitHub Actions workflows
+│       ├── gcp.yaml      # Workflow for Google Cloud Platform deployment
+│       └── test.yml      # Workflow for running tests
+├── .gitignore            # Git ignore file
+├── airflow/              # Airflow configuration and DAGs
+│   ├── .env              # Airflow environment variables
+│   ├── Dockerfile        # Airflow Docker configuration
+│   ├── config/           # Airflow configuration files
+│   ├── dags/             # Airflow DAG definitions
+│   │   └── job_scraping_dag.py  # DAG for job scraping
+│   ├── docker-compose.yml  # Airflow Docker Compose configuration
+│   ├── logs/             # Airflow logs
+│   ├── plugins/          # Airflow plugins
+│   └── requirements.txt  # Airflow Python dependencies
+├── backend/              # Backend code
+│   ├── __init__.py       # Python package initialization
+│   ├── cover/            # Cover letter generation functionality
+│   ├── deploy/           # Deployment-related code
+│   ├── docker-compose.yml  # Backend Docker Compose configuration
+│   ├── Dockerfile        # Backend Docker configuration
+│   ├── jobs/             # Job-related functionality
+│   │   ├── __init__.py   # Package initialization
+│   │   ├── embeddings.py # Job embeddings processing
+│   │   ├── job_matching.py  # Job matching algorithm
+│   │   └── scraper.py    # Web scraper for jobs
+│   ├── main.py           # Main FastAPI application
+│   ├── orchestration/    # Workflow orchestration
+│   ├── profile_improvement/  # Profile improvement functionality
+│   ├── tests/            # Test cases
+│   │   ├── README.md     # Test documentation
+│   │   ├── test_api.py   # API tests
+│   │   ├── test_embeddings.py  # Embeddings tests
+│   │   ├── test_github_processor.py  # GitHub processing tests
+│   │   ├── test_integration.py  # Integration tests
+│   │   ├── test_job_embeddings.py  # Job embeddings tests
+│   │   ├── test_match_visualization.py  # Match visualization tests
+│   │   ├── test_namespace_job_matching.py  # Namespace job matching tests
+│   │   ├── test_pinecone_job.py  # Pinecone job tests
+│   │   └── test_pinecone_storage.py  # Pinecone storage tests
+│   ├── user/             # User-related functionality
+│   │   ├── github.py     # GitHub profile processing
+│   │   ├── resume.py     # Resume processing
+│   │   └── user_embedding.py  # User embedding generation
+│   └── web/              # Web-related functionality
+├── docker-compose.yml    # Root Docker Compose configuration
+├── frontend/             # Frontend code
+│   └── app.py            # Streamlit frontend application
+├── logs/                 # Application logs
+├── plugins/              # Application plugins
+└── requirements.txt      # Root Python dependencies
 ```
 
 ---
