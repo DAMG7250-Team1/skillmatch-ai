@@ -1,128 +1,108 @@
-# orchestrator.py
+# orchestration.py
 
-from langchain.llms import OpenAI
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
-
-# Try importing LangGraph. If not available, we simulate a simple graph.
+import requests
 try:
     from langgraph import Graph
 except ImportError:
-    # Simulate a graph with a basic dictionary of nodes.
+    # Simple simulation of a graph for orchestration
     class Graph:
         def __init__(self):
             self.nodes = {}
-        def add_node(self, name, chain):
-            self.nodes[name] = chain
+        def add_node(self, name, func):
+            self.nodes[name] = func
             return name
         def add_edge(self, from_node, to_node):
-            # In this simple simulation, edges are not used
+            # In this simulation, edges are not used for control flow.
             pass
         def run_all(self, inputs):
+            # Execute nodes in a fixed order.
             results = {}
-            for name, chain in self.nodes.items():
-                results[name] = chain.run(inputs)
+            # Node order: ProcessProfile -> JobMatching -> GenerateFeedback
+            for node_name in ["ProcessProfile", "JobMatching", "GenerateFeedback"]:
+                func = self.nodes.get(node_name)
+                if func:
+                    output = func(inputs)
+                    inputs.update(output)  # Update the inputs with the node's outputs
+                    results[node_name] = output
             return results
 
-# --- Define prompt templates for each agent ---
+# Import your cover letter and improvement generation function.
+from cover.cover_letter import generate_cover_letter_and_improvements
 
-# Cover Letter Agent: Generates a cover letter based on candidate profile and job description.
-cover_letter_template = """
-You are a professional cover letter writer. Given the following candidate profile and job description, generate a personalized cover letter that highlights the candidate's skills and achievements and explains why they are a perfect fit for the job.
-
-Candidate Profile:
-{profile}
-
-Job Description:
-{job_description}
-
-Please format the answer as a cover letter with a clear introduction, body, and closing.
-"""
-
-cover_letter_prompt = PromptTemplate(
-    input_variables=["profile", "job_description"],
-    template=cover_letter_template
-)
-
-# Profile Improvement Agent: Provides actionable recommendations to improve the candidate profile.
-profile_improvement_template = """
-You are an expert career advisor. Given the candidate's profile and the job description provided, generate a concise bullet list of actionable recommendations 
-on how the candidate can improve their profile to become more suitable for the position.
-
-Candidate Profile:
-{profile}
-
-Job Description:
-{job_description}
-
-Provide your answer as a bullet list of suggestions.
-"""
-
-profile_improvement_prompt = PromptTemplate(
-    input_variables=["profile", "job_description"],
-    template=profile_improvement_template
-)
-
-# --- Initialize the LLM ---
-# Adjust temperature or model_name parameters as needed.
-llm = OpenAI(temperature=0.7, model_name="gpt-3.5-turbo")
-
-# --- Create LLMChain instances for each agent ---
-cover_letter_chain = LLMChain(
-    llm=llm, 
-    prompt=cover_letter_prompt, 
-    output_key="cover_letter"
-)
-
-profile_improvement_chain = LLMChain(
-    llm=llm, 
-    prompt=profile_improvement_prompt, 
-    output_key="improvement_suggestions"
-)
-
-# --- Build the orchestration graph ---
-graph = Graph()
-cover_letter_node = graph.add_node("CoverLetterAgent", chain=cover_letter_chain)
-improvement_node = graph.add_node("ProfileImprovementAgent", chain=profile_improvement_chain)
-
-# Optionally add edges if you want to express a workflow order.
-graph.add_edge(cover_letter_node, improvement_node)
-
-# --- Define function to run the orchestration graph ---
-def run_agents(profile: str, job_description: str) -> dict:
+def process_profile_node(inputs: dict) -> dict:
     """
-    Run both the cover letter and profile improvement agents in parallel.
-    Returns a dictionary with cover letter and improvement suggestions.
+    Fetches the resume and GitHub markdown content from the URLs,
+    combines them into a full candidate profile, and passes the job description.
+    Expects inputs to contain:
+      - "resume_md_url"
+      - "github_md_url"
+      - "job_opening": a dict containing at least a "job_text" key.
     """
-    inputs = {"profile": profile, "job_description": job_description}
+    resume_resp = requests.get(inputs["resume_md_url"])
+    if resume_resp.status_code != 200:
+        raise Exception(f"Error fetching resume markdown: {resume_resp.text}")
+    git_resp = requests.get(inputs["github_md_url"])
+    if git_resp.status_code != 200:
+        raise Exception(f"Error fetching GitHub markdown: {git_resp.text}")
     
-    # Option 1: Use the graph to run all nodes
-    results = graph.run_all(inputs)
-    
-    # Alternatively, you can call each chain directly:
-    # cover_letter = cover_letter_chain.run(inputs)
-    # improvement = profile_improvement_chain.run(inputs)
-    # results = {"cover_letter": cover_letter, "improvement_suggestions": improvement}
-    
+    combined_profile = resume_resp.text + "\n\n" + git_resp.text
+    job_description = inputs.get("job_opening", {}).get("job_text", "")
+    return {"combined_profile": combined_profile, "job_description": job_description}
+
+def job_matching_node(inputs: dict) -> dict:
+    """
+    For orchestration, this node simply passes the job ID along.
+    In an extended implementation, this node could query a job matching API.
+    Expects inputs to contain "job_id".
+    """
+    return {"job_id": inputs.get("job_id", "")}
+
+def generate_feedback_node(inputs: dict) -> dict:
+    """
+    Uses the combined candidate profile and job description to generate both a cover letter
+    and profile improvement suggestions.
+    Expects inputs to have:
+       - "combined_profile"
+       - "job_description"
+    """
+    profile = inputs.get("combined_profile", "")
+    job_desc = inputs.get("job_description", "")
+    # Call your helper function that uses direct OpenAI API calls.
+    results = generate_cover_letter_and_improvements(profile, job_desc)
     return results
 
-# --- Example usage ---
+def create_workflow_graph() -> Graph:
+    graph = Graph()
+    graph.add_node("ProcessProfile", process_profile_node)
+    graph.add_node("JobMatching", job_matching_node)
+    graph.add_node("GenerateFeedback", generate_feedback_node)
+    # Optionally, add edges (not used in this simple simulation)
+    return graph
+
+def run_workflow(resume_md_url: str, github_md_url: str, job_opening: dict, job_id: str) -> dict:
+    """
+    Runs the complete workflow:
+      - Retrieves the candidate's markdown files (resume and GitHub) from their URLs,
+      - Combines them into one candidate profile,
+      - Passes along the job details from job_opening and the job_id,
+      - Finally, generates both the cover letter and improvement suggestions.
+    Returns the output from the GenerateFeedback node.
+    """
+    inputs = {
+        "resume_md_url": resume_md_url,
+        "github_md_url": github_md_url,
+        "job_opening": job_opening,
+        "job_id": job_id
+    }
+    graph = create_workflow_graph()
+    results = graph.run_all(inputs)
+    return results.get("GenerateFeedback", {})
+
 if __name__ == "__main__":
-    # Example candidate profile and job description
-    candidate_profile = """
-    John Doe is a seasoned software engineer with 7 years of industry experience, specializing in backend development, cloud infrastructure, and microservices architecture.
-    He has led development teams and is passionate about leveraging modern technologies to build scalable and reliable systems.
-    """
-    
-    job_description = """
-    Our company is seeking a Senior Software Engineer with strong experience in designing and implementing scalable back-end systems.
-    The ideal candidate should have extensive experience with cloud infrastructure, containerization, and microservices.
-    Leadership skills and the ability to mentor junior developers are essential.
-    """
-    
-    # Run both agents via the orchestrator graph
-    output = run_agents(candidate_profile, job_description)
-    print("Generated Cover Letter:\n")
-    print(output.get("CoverLetterAgent", "No cover letter generated."))
-    print("\nProfile Improvement Suggestions:\n")
-    print(output.get("ProfileImprovementAgent", "No suggestions generated."))
+    # Example usage:
+    resume_md_url = "https://example.com/resume.md"
+    github_md_url = "https://example.com/github.md"
+    job_opening = {"job_text": "We are seeking a Senior Software Engineer with 3+ years of experience in cloud computing."}
+    job_id = "job123"
+    output = run_workflow(resume_md_url, github_md_url, job_opening, job_id)
+    print(output)
