@@ -1,5 +1,4 @@
 import pytest
-from fastapi.testclient import TestClient
 import os
 import sys
 import json
@@ -9,47 +8,23 @@ import numpy as np
 # Add the parent directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Mock Pinecone before importing app
-with patch('pinecone.Pinecone') as mock_pinecone:
-    # Set up the mock index
-    mock_index = MagicMock()
-    mock_pinecone.return_value.Index.return_value = mock_index
+# Mock dependencies before importing
+with patch('backend.jobs.embeddings.JobEmbeddingsProcessor'), \
+     patch('backend.user.resume.ResumeProcessor'), \
+     patch('backend.user.github.GitHubProcessor'), \
+     patch('backend.user.user_embedding.UserEmbeddingProcessor'), \
+     patch('backend.jobs.job_matching.JobMatcher'), \
+     patch('backend.web.company_agent.CompanyJobAgent'), \
+     patch('backend.cover.cover_letter.CoverProfileAgent'), \
+     patch('pinecone.Pinecone'), \
+     patch('boto3.client'):
     
-    # Now import the app with mocked Pinecone
+    # Now import the FastAPI app with mocks in place
+    from fastapi.testclient import TestClient
     from main import app
 
 # Create a test client
 client = TestClient(app)
-
-# Apply patches for all processor classes
-@pytest.fixture(autouse=True)
-def mock_dependencies():
-    """Mock all external dependencies for tests"""
-    with patch('backend.jobs.embeddings.JobEmbeddingsProcessor') as mock_embeddings, \
-         patch('backend.user.resume.ResumeProcessor') as mock_resume, \
-         patch('backend.user.github.GitHubProcessor') as mock_github, \
-         patch('backend.user.user_embedding.UserEmbeddingProcessor') as mock_user, \
-         patch('backend.jobs.job_matching.JobMatcher') as mock_matcher, \
-         patch('pinecone.Pinecone') as mock_pinecone, \
-         patch('boto3.client') as mock_boto3, \
-         patch('openai.embeddings.create') as mock_openai:
-        
-        # Set up mock returns
-        mock_pinecone_instance = MagicMock()
-        mock_index = MagicMock()
-        mock_pinecone.return_value = mock_pinecone_instance
-        mock_pinecone_instance.Index.return_value = mock_index
-        
-        yield {
-            'embeddings': mock_embeddings,
-            'resume': mock_resume,
-            'github': mock_github,
-            'user': mock_user,
-            'matcher': mock_matcher,
-            'pinecone': mock_pinecone,
-            'boto3': mock_boto3,
-            'openai': mock_openai
-        }
 
 def test_health_check():
     """Test the health check endpoint"""
@@ -59,26 +34,24 @@ def test_health_check():
 
 def test_job_details_endpoint():
     """Test the job details endpoint"""
-    # Mock the app's embeddings processor
-    with patch.object(app.embeddings_processor.index, 'fetch') as mock_fetch:
-        mock_fetch.return_value = {
-            "vectors": {
-                "test-job-id": {
-                    "id": "test-job-id",
-                    "metadata": {
-                        "job_title": "Test Engineer",
-                        "company": "Test Company",
-                        "job_type": "Full-time",
-                        "work_mode": "Remote",
-                        "location": "Test Location",
-                        "seniority": "Mid-level",
-                        "experience": "3-5 years",
-                        "responsibilities": "Testing, Coding",
-                        "qualifications": "Python, Testing",
-                        "skills": "Python, Testing, CI/CD"
-                    }
+    # Create a mock for the embeddings_processor.index.fetch method
+    with patch('main.embeddings_processor.index.fetch') as mock_fetch:
+        mock_fetch.return_value = MagicMock()
+        mock_fetch.return_value.vectors = {
+            "test-job-id": MagicMock(
+                metadata={
+                    "job_title": "Test Engineer",
+                    "company": "Test Company",
+                    "job_type": "Full-time",
+                    "work_mode": "Remote",
+                    "location": "Test Location",
+                    "seniority": "Mid-level",
+                    "experience": "3-5 years",
+                    "responsibilities": "Testing, Coding",
+                    "qualifications": "Python, Testing",
+                    "skills": "Python, Testing, CI/CD"
                 }
-            }
+            )
         }
         
         # Test the job details endpoint
@@ -89,8 +62,8 @@ def test_job_details_endpoint():
 
 def test_match_jobs_endpoint():
     """Test the match jobs endpoint"""
-    # Mock the app's job matcher
-    with patch.object(app.job_matcher, 'match_profile_with_jobs') as mock_match:
+    # Create a mock for the job_matcher.match_profile_with_jobs method
+    with patch('main.job_matcher.match_profile_with_jobs') as mock_match:
         mock_match.return_value = {
             "status": "success",
             "total_matches": 1,
@@ -100,7 +73,7 @@ def test_match_jobs_endpoint():
                     "job_title": "Test Engineer",
                     "company": "Test Company",
                     "similarity_score": 0.85,
-                    "skills": ["Python", "Testing", "CI/CD"]
+                    "matching_skills": ["Python", "Testing", "CI/CD"]
                 }
             ]
         }
