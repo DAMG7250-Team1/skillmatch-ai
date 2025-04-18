@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
  
 # Load environment variables
 load_dotenv()
-BACKEND_API_URL = os.getenv('BACKEND_API_URL', 'http://localhost:8000')
+BACKEND_API_URL = os.getenv('BACKEND_API_URL', 'https://skillmatch-xqv7xxttja-ue.a.run.app')
  
 # Initialize session state for persistence across reruns
 for key, default in [
